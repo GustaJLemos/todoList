@@ -63,11 +63,24 @@ export const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   separator: {
-    width: '90%',
+    width: '100%',
     height: 2,
 
     alignSelf: 'center',
 
     backgroundColor: COLORS.gray400
+  },
+  listEmptyImage: {
+    alignSelf: 'center',
+
+    marginTop: 54,
+    marginBottom: 24,
+  },
+  listEmptyTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+
+    color: COLORS.gray300
   }
 });

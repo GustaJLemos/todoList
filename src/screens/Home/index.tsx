@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Alert, FlatList, Image, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Logo from '../../assets/Logo.png'
+import Clipboard from '../../assets/Clipboard.png'
 import { COLORS } from '../../global/colors';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,26 +21,25 @@ export function Home() {
       return Alert.alert('Task já existe', 'Já existe uma task na lista com essa descrição')
     }
     setTasks(prevState => [...prevState, taskDescription])
+    setTaskDescription('')
   }
 
   function handleFinishTask(item: string) {
-    console.log('aq')
-
-    // const filteredTasks = tasksFinisheds.filter(prevState => prevState !== item)
-
     if(tasksFinisheds.includes(item)) {
       return setTasksFinisheds(tasksFinisheds.filter(prevState => prevState !== item))
     }
 
     setTasksFinisheds(prevState => [...prevState, item])
   }
-  console.log(tasksFinisheds)
 
   function handleDeleteTask(item: string) {
     Alert.alert('Remover task', `Tem certeza que deseja remover a task?`, [
       {
         text: 'Sim',
-        onPress: () => setTasks(prevState => prevState.filter(participant => participant !== item))
+        onPress: () => {
+          setTasks(prevState => prevState.filter(participant => participant !== item)),
+          setTasksFinisheds(prevState => prevState.filter(participant => participant !== item))
+        }
       },
       {
         text: 'Não',
@@ -73,12 +73,6 @@ export function Home() {
         </TouchableOpacity>
       </View>
       
-
-      {/* TODO talvez exibir detalhes qunado a tarefa for muito grande
-          atualizar array de concluidos quando excluo uma task
-          quando adiciono uma task, eu limpo o input para o usuário n precisar apagar
-          talvez separar em abas os concluido, deletados e tals, scrollando para o lado que quero
-      */}
       <View style={styles.listContainer}>
         <View style={styles.listFilterContainer}>
           <ListFilter title='Criadas' count={tasks.length}/>
@@ -95,7 +89,19 @@ export function Home() {
             marginHorizontal: 24
           }}
           ListEmptyComponent={() => (
-            <View style={styles.separator} />
+            <>
+              <View style={styles.separator} />
+              <Image 
+                source={Clipboard}
+                style={styles.listEmptyImage}
+              />
+              <Text style={styles.listEmptyTitle}>
+                Você ainda não tem tarefas cadastradas{'\n'}
+                <Text style={{ fontWeight: 'normal' }}>
+                  Crie tarefas e organize seus itens a fazer
+                </Text>
+              </Text>
+            </>
 
           )}
           renderItem={({item, index}) => (
